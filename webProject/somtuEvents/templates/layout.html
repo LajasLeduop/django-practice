@@ -5,6 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SOMTU Events | {% block title %}{% endblock %}</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+      .carousel-caption-overlay {
+    background-color: rgba(0, 0, 0, 0.623); /* Translucent dark background */
+    padding: 20px; /* Adjust padding as needed */
+    color: white; /* Text color */
+}
+
+    </style>
 </head>
 <body>
     <!-- Header -->
@@ -15,15 +23,40 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ml-auto">
+        
+        {% if user.is_authenticated %}
         <li class="nav-item active">
-          <a class="nav-link" href="{% url 'index' %}">Home <span class="sr-only">(current)</span></a>
+          <a class="nav-link" href="{% url 'admindash' %}">Home <span class="sr-only">(current)</span></a>
         </li>
+            {% else %}
+            <li class="nav-item active">
+              <a class="nav-link" href="{% url 'index' %}">Home <span class="sr-only">(current)</span></a>
+            </li>
+            {% endif %}
+
+
+
+
         <li class="nav-item">
           <a class="nav-link" href="{% url 'events' %}">Events</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">About</a>
         </li>
+        {% if user.is_authenticated %}
+                    <li class="nav-item">
+                       
+                      <a href="{% url 'logout' %}" class="nav-link">Logout</a>
+               
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'admindash' %}" class="nav-link">Admin Panel</a>
+                    </li>
+            {% else %}
+            <li class="nav-item">
+                <a href="{% url 'login' %}" class="nav-link">Login</a>
+            </li>
+            {% endif %}
         
       </ul>
     </div>

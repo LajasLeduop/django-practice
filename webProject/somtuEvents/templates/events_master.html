@@ -3,8 +3,24 @@
 {% block title %} Events {% endblock %}
 
 {% block body %}
-<div class="sm-6">
-    <div>Welcome to events master page.</div>
+
+  <!-- Main Content Area -->
+  <div class="container mt-5">
+    <h2>Upcoming Events</h2>
+    <div class="row">
+      {% for event in events %}
+        <div class="col-md-4">
+            <div class="card">
+                <img class="card-img-top" src="{{ event.banner.url }}" alt="Event 4">
+                <div class="card-body">
+                    <h5 class="card-title">{{ event.name }}</h5>
+                    <p class="card-text">{{ event.event_details }}</p>
+                    <a href="{% url 'event_detail' event.id %}" class="btn btn-primary">More Info</a>
+                </div>
+            </div>
+        </div>
+      {% endfor %}
+    </div>
 </div>
 
 {% endblock %}
