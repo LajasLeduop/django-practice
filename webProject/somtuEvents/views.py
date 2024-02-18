@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.views import View
 from datetime import datetime
 from django.http import HttpResponse
 # Create your views here.
@@ -14,3 +15,7 @@ def index(request):
         "message":message
     }
     return render(request,"index.html",data)
+
+
+def events(request):
+    return render(request,"events_master.html")

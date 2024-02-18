@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}{% endblock %}</title>
+    <title>SOMTU Events | {% block title %}{% endblock %}</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
@@ -16,10 +16,10 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ml-auto">
         <li class="nav-item active">
-          <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+          <a class="nav-link" href="{% url 'index' %}">Home <span class="sr-only">(current)</span></a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Events</a>
+          <a class="nav-link" href="{% url 'events' %}">Events</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="#">About</a>
@@ -30,6 +30,7 @@
   </nav>
   <div class="container">
     {% block body %}
+
     {% endblock %}
 </div>
 
@@ -42,7 +43,7 @@
                 </div>
                 <div class="col-md-6">
                     <h5>Contact Us</h5>
-                    <p>Email: som.tu.edu.np</p>
+                    <p>Email: <a href="mailto:som.tu.edu.np"></a>som.tu.edu.np</p>
                     <p>Phone: 123-456-7890</p>
                 </div>
             </div>
