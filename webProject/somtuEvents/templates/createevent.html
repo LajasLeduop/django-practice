@@ -24,8 +24,12 @@
             <input type="text" id="id_venue_location" name="venue_location" class="form-control">
         </div>
         <div class="mb-3">
-            <label for="id_event_date" class="form-label">Event Date</label>
-            <input type="datetime-local" id="id_event_date" name="event_date" class="form-control">
+            <label for="id_event_start_date" class="form-label">Event Start Date</label>
+            <input type="datetime-local" id="id_event_start_date" name="event_start_date" class="form-control">
+        </div>
+        <div class="mb-3">
+            <label for="id_event_end_date" class="form-label">Event End Date</label>
+            <input type="datetime-local" id="id_event_end_date" name="event_end_date" class="form-control">
         </div>
         <div class="mb-3">
             <label for="id_event_details" class="form-label">Event Details</label>
@@ -40,7 +44,7 @@
         </div>
         <div class="mb-3 form-check">
             <input type="checkbox" id="id_is_active" name="is_active" class="form-check-input">
-            <label for="id_is_active" class="form-check-label">Is the Event Active</label>
+            <label for="id_is_active" class="form-check-label">Is this Event Active</label>
         </div>
         
         <button type="submit" class="btn btn-primary">Save Event Details</button>

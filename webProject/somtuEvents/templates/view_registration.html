@@ -1,0 +1,37 @@
+{% extends "layout.html" %}
+
+{% block title %} View Registration {% endblock %}
+
+{% block body %}
+
+<div class="container">
+    <h2 class="mt-4">Attendee List</h2>
+    
+    {% for event in events %}
+    <h3>{{ event.name }}</h3>
+    
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>SOMTU Student</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for attendee in attendees %}
+                {% if attendee.event_id == event.id %}
+                <tr>
+                    <td>{{ attendee.attendee_name }}</td>
+                    <td>{{ attendee.attendee_email }}</td>
+                    <td>{{ attendee.attendee_phone }}</td>
+                    <td>{{ attendee.is_somtu_student }}</td>
+                </tr>
+                {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endfor %}
+</div>
+{% endblock %}

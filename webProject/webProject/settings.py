@@ -78,7 +78,7 @@ WSGI_APPLICATION = 'webProject.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME':'somtu_project',
+        'NAME':'somtu_events',
         'USER':'root',
         'PASSWORD':'Sajal.2017',
         'PORT':3306,
@@ -132,6 +132,6 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
-LOGIN_REDIRECT_URL='admindash'
-LOGIN_URL='login'
-LOGOUT_REIDRECT_URL="index"
+LOGIN_REDIRECT_URL= 'admindash'
+LOGIN_URL= 'login'
+LOGOUT_REIDRECT_URL= 'index'
