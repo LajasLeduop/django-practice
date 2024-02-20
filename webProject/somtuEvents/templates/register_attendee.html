@@ -1,5 +1,6 @@
 
 {% extends "layout.html" %}
+{% load widget_tweaks %}
 {% block title %} Create Event {% endblock %}
 
 
@@ -8,35 +9,34 @@
 {% block body %}
 
 <div class="container">
-    <h2>Create Event</h2>
-    <form method="post" enctype="multipart/form-data" class="my-4">
+    <h2>Register For Event</h2>
+    <form method="post" class="mt-5">
         {% csrf_token %}
-        <div class="mb-3">
-            <label for="id_attendee_name" class="form-label">Attendee Name</label>
-            <input type="text" id="id_attendee_name" name="attendee_name" class="form-control">
+        <div class="form-group">
+            <label for="{{ form.attendee_name.id_for_label }}">Attendee Name</label>
+            {{ form.attendee_name|add_class:"form-control" }}
         </div>
-        <div class="mb-3">
-            <label for="id_attendee_email" class="form-label">Attendee Email</label>
-            <input type="email" id="id_attendee_email" name="attendee_email" class="form-control">
+        <div class="form-group">
+            <label for="{{ form.attendee_email.id_for_label }}">Attendee Email</label>
+            {{ form.attendee_email|add_class:"form-control" }}
         </div>
-        <div class="mb-3">
-            <label for="id_attendee_phone" class="form-label">Attendee Phone</label>
-            <input type="tel" id="id_attendee_phone" name="attendee_phone" class="form-control">
+        <div class="form-group">
+            <label for="{{ form.attendee_phone.id_for_label }}">Attendee Phone</label>
+            {{ form.attendee_phone|add_class:"form-control" }}
         </div>
-        <div class="mb-3">
-            <label for="id_attendee_class" class="form-label">Class Name</label>
-            <select id="id_attendee_class" name="attendee_class" class="form-select">
-                {% for class in classes %}
-                <option value="option1">{{ class.class_name }}-{{ class.class_stream }} {{ class.class_batch}}</option>
-                {% endfor %}
-            </select>
+        <div class="form-group">
+            <label for="{{ form.attendee_class.id_for_label }}">Attendee Class</label>
+            {{ form.attendee_class|add_class:"form-control form-select" }}
         </div>
-        <div class="mb-3 form-check">
-            <input type="checkbox" id="id_is_active" name="is_somtu_student" class="form-check-input">
-            <label for="id_is_active" class="form-check-label">SOMTU Student</label>
+        <div class="form-check">
+            {{ form.is_somtu_student|add_class:"form-check-input" }}
+            <label class="form-check-label" for="{{ form.is_somtu_student.id_for_label }}">Is SOMTU Student</label>
         </div>
-        
-        <button type="submit" class="btn btn-primary">Save Attendee Details</button>
+        <div class="form-group">
+            <label for="{{ form.event.id_for_label }}">Event</label>
+            {{ form.event|add_class:"form-control" }}
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
     </form>
 </div>
 {% endblock %}

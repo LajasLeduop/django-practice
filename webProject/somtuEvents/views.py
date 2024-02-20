@@ -4,23 +4,27 @@ from datetime import datetime
 from django.http import HttpResponse
 from django.contrib.auth.views import LoginView,LogoutView
 from django.urls import reverse_lazy
-from . forms import LoginForm
+from . forms import LoginForm,AttendeeForm
 from django.contrib.auth.decorators import login_required
 from .models import EventDetails,EventAttendee,BatchClass
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth import logout
 # Create your views here.
 
 
-class loginuser(LoginView):
+class LoginUser(LoginView):
     template_name = 'login.html'
     form_class = LoginForm
     success_url = reverse_lazy('admin_request')
 
 
+def logout_user(request):
+    logout(request)
+    return redirect('index')
 
 
-class logout(LogoutView):
-    next_page = reverse_lazy('index')
+# didn't work
+# class LogoutUser(LogoutView):
+#     next_page = reverse_lazy('index')
 
 
 class index(View):
@@ -85,32 +89,23 @@ def event_details(request,eventid):
 
 class register(View):
     def post(self,request):
-        attendee_name=request.POST.get('attendee_name')
-        attendee_email=request.POST.get('attendee_email')
-        attendee_phone=request.POST.get('attendee_phone')
-        attendee_class=request.POST.get('attendee_class')
-        attendee_is_somtu_student=request.POST.get('is_somtu_student')
-
-        if attendee_is_somtu_student=="on":
-            attendee_is_somtu_student=True
-        else:
-            attendee_is_somtu_student=False
-
-        attendee=EventAttendee(
-            attendee_name=attendee_name,
-            attendee_email=attendee_email,
-            attendee_phone=attendee_phone,
-            attendee_class=attendee_class,
-            is_somtu_student=attendee_is_somtu_student
-        )
-
-        attendee.save()
+        form = AttendeeForm(request.POST)
+        if form.is_valid():
+            # Create an instance of the EventAttendee model but don't save it yet
+            event_attendee = form.save(commit=False)
+            if event_attendee.is_somtu_student== 'on':
+                event_attendee.is_somtu_student=True
+            else:
+                event_attendee.is_somtu_student=False
+        event_attendee.save()        
         return redirect('index')
 
 
     def get(self,request):
+        form=AttendeeForm()
         classes=BatchClass.objects.all()
         data={
+            'form':form,
             'classes':classes
         }
         return render(request,"register_attendee.html",data)
