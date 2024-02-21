@@ -1,53 +1,54 @@
 
 {% extends "layout.html" %}
-{% block title %} Create Event {% endblock %}
+{% load widget_tweaks %}
+{% block title %} Update Event {% endblock %}
 
 
 
 
 {% block body %}
-
 <div class="container mt-5">
-    <h2>Create Event</h2>
+    <h2>Update Event</h2>
     <form method="post" enctype="multipart/form-data" class="my-4">
         {% csrf_token %}
         <div class="mb-3">
             <label for="id_name" class="form-label">Event Name</label>
-            <input type="text" id="id_name" name="name" class="form-control">
+            {{ form.name|add_class:"form-control" }}
         </div>
         <div class="mb-3">
             <label for="id_venue" class="form-label">Venue</label>
-            <input type="text" id="id_venue" name="venue" class="form-control">
+            {{ form.venue|add_class:"form-control" }}
         </div>
         <div class="mb-3">
             <label for="id_venue_location" class="form-label">Venue Location</label>
-            <input type="text" id="id_venue_location" name="venue_location" class="form-control">
+            {{ form.venue_location|add_class:"form-control" }}
         </div>
         <div class="mb-3">
             <label for="id_event_start_date" class="form-label">Event Start Date</label>
-            <input type="datetime-local" id="id_event_start_date" name="event_start_date" class="form-control">
+            {{ form.event_start_date|add_class:"form-control" }}
         </div>
         <div class="mb-3">
             <label for="id_event_end_date" class="form-label">Event End Date</label>
-            <input type="datetime-local" id="id_event_end_date" name="event_end_date" class="form-control">
+            {{ form.event_end_date|add_class:"form-control" }}
         </div>
         <div class="mb-3">
             <label for="id_event_details" class="form-label">Event Details</label>
-            <textarea id="id_event_details" name="event_details" class="form-control" rows="4"></textarea>
+            {{ form.event_details|add_class:"form-control" }}
         </div>
         <div class="mb-3">
             <label for="id_banner" class="form-label">Banner Image</label>
-            <div class="input-group">
-                
-                <input type="file" id="id_banner" name="banner" class="form-control">
-            </div>
+            {{ form.banner|add_class:"form-control" }}
         </div>
         <div class="mb-3 form-check">
-            <input type="checkbox" id="id_is_active" name="is_active" class="form-check-input">
+            {{ form.is_active|add_class:"form-check-input" }}
             <label for="id_is_active" class="form-check-label">Is this Event Active</label>
         </div>
         
         <button type="submit" class="btn btn-primary">Save Event Details</button>
     </form>
 </div>
+<script>
+document.getElementById("id_event_start_date").type = "datetime-local";
+document.getElementById("id_event_end_date").type = "datetime-local";
+</script>
 {% endblock %}

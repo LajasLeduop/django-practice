@@ -1,14 +1,14 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,get_object_or_404
 from django.views import View
 from datetime import datetime
 from django.http import HttpResponse
 from django.contrib.auth.views import LoginView,LogoutView
 from django.urls import reverse_lazy
-from . forms import LoginForm,AttendeeForm
-from django.contrib.auth.decorators import login_required
+from . forms import LoginForm,AttendeeForm,eventform
+from django.contrib.auth.decorators import login_required,permission_required
 from .models import EventDetails,EventAttendee,BatchClass
 from django.contrib.auth import logout
-# Create your views here.
+
 
 
 class LoginUser(LoginView):
@@ -49,6 +49,7 @@ def events(request):
 
 
 @login_required
+@permission_required('Somtuevents.create_event',login_url='login')
 def create_event(request):
     if request.method == 'POST':
         name = request.POST.get('name')
@@ -84,8 +85,13 @@ def create_event(request):
 def admindash(request):
     return render(request,"admin-page.html")
 
+
 def event_details(request,eventid):
-    return HttpResponse(f"EventID: {eventid}, Valid Path")
+    event = get_object_or_404(EventDetails, pk=eventid)
+    data={
+        'event':event
+    }
+    return render(request,"event_detail.html",data)
 
 class register(View):
     def post(self,request):
@@ -119,3 +125,28 @@ def view_registrations(request):
 
     }
     return render(request,"view_registration.html",data)
+
+def update_event(request,eventid):
+    event = EventDetails.objects.get(pk=eventid)
+    if request.method == 'POST':
+        form = eventform(request.POST, request.FILES, instance=event)
+        if form.is_valid():
+            form.save()
+        return redirect('event_detail', eventid=eventid)
+    else:
+        form = eventform(instance=event)
+    return render(request,"update_events.html",{'form':form})
+
+@login_required
+@permission_required('Somtuevents.delete_event',login_url='login')
+def delete_event(request,eventid):
+    if request.method=="POST":
+        event=EventDetails.objects.get(pk=eventid)
+        event.delete()
+        return redirect('events')
+    elif request.method == "GET":
+        message={
+            'type':"error",
+            'message':"Sorry but this route does not support GET method."
+        }
+        return render(request,"message.html",message)

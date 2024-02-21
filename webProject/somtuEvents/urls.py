@@ -11,5 +11,7 @@ urlpatterns=[
     path("admin-dash/", views.admindash,name="admindash"),
     path("eventdetail/<str:eventid>/", views.event_details, name="event_detail"),
     path("register/attendee/",views.register.as_view(),name="register_attendee"),
-    path("view/registrations/",views.view_registrations,name="view_registrations")
+    path("view/registrations/",views.view_registrations,name="view_registrations"),
+    path("delete_event/<str:eventid>/",views.delete_event,name="delete_event"),
+    path("update_event/<str:eventid>/",views.update_event,name="update_event")
 ]
