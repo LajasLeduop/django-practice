@@ -1,5 +1,5 @@
 {% extends "layout.html" %}
-
+{% load bootstrap_icons %}
 {% block title %} View Event {% endblock %}
 
 {% block body %}
@@ -10,7 +10,7 @@
         <img class="card-img-top" src="{{ event.banner.url }}" alt="Event 4">
         <h5 class="card-title">{{ event.name }}</h5>
         <p class="card-text">Venue: {{ event.venue }}</p>
-        <p class="card-text">Location: {{ event.venue_location }}</p>
+        <p class="card-text">{% bs_icon "geo-alt" %}Location: {{ event.venue_location }}</p>
         <p class="card-text">Details: {{ event.event_details }}</p>
         <!-- Add any other event details you want to display -->
         {% if user.is_authenticated and user.is_staff and perms.Somtuevents.change_event %}

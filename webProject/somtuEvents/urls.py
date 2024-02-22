@@ -13,5 +13,6 @@ urlpatterns=[
     path("register/attendee/",views.register.as_view(),name="register_attendee"),
     path("view/registrations/",views.view_registrations,name="view_registrations"),
     path("delete_event/<str:eventid>/",views.delete_event,name="delete_event"),
-    path("update_event/<str:eventid>/",views.update_event,name="update_event")
+    path("update_event/<str:eventid>/",views.update_event,name="update_event"),
+    path("create_user",views.create_user,name="create_user")
 ]

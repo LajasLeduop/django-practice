@@ -19,15 +19,10 @@ class EventDetails(models.Model):
         return self.name
     
     def delete(self, *args, **kwargs):
-    # Delete the associated image file before deleting the event object
         if self.banner:
-            # Get the path to the image file
             image_path = self.banner.path
-            # Check if the file exists before attempting to delete it
             if os.path.exists(image_path):
-                # Delete the file
                 os.remove(image_path)
-        # Call the superclass delete method to delete the event object
         super().delete(*args, **kwargs)
     
 class EventAttendee(models.Model):
@@ -49,3 +44,5 @@ class BatchClass(models.Model):
 
     def __str__(self):
         return self.class_name + " " + self.class_stream + " " + str(self.class_batch)
+
+ 

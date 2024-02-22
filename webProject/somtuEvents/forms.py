@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm,UserCreationForm
 from . models import *
 
 
@@ -32,3 +32,4 @@ class AttendeeForm(forms.ModelForm):
     class Meta:
         model = EventAttendee
         fields = ['attendee_name', 'attendee_email','attendee_phone','attendee_class','is_somtu_student','event']
+

@@ -8,6 +8,7 @@ from . forms import LoginForm,AttendeeForm,eventform
 from django.contrib.auth.decorators import login_required,permission_required
 from .models import EventDetails,EventAttendee,BatchClass
 from django.contrib.auth import logout
+from django.contrib.auth.models import User
 
 
 
@@ -99,10 +100,11 @@ class register(View):
         if form.is_valid():
             # Create an instance of the EventAttendee model but don't save it yet
             event_attendee = form.save(commit=False)
-            if event_attendee.is_somtu_student== 'on':
-                event_attendee.is_somtu_student=True
+            if 'is_somtu_student' in request.POST:
+                event_attendee.is_somtu_student = True
             else:
-                event_attendee.is_somtu_student=False
+                event_attendee.is_somtu_student = False
+            
         event_attendee.save()        
         return redirect('index')
 
@@ -150,3 +152,26 @@ def delete_event(request,eventid):
             'message':"Sorry but this route does not support GET method."
         }
         return render(request,"message.html",message)
+    
+
+@login_required
+@permission_required('Somtuevents.create_user',login_url='login')
+def create_user(request):
+    if request.method == "POST":
+        username=request.POST.get('username')
+        password=request.POST.get('password')
+        email=request.POST.get('email')
+        user=User.objects.create_user(username=username,password=password,email=email)
+        user.is_active=False
+        user.is_staff=True
+        user.is_superuser=False
+        user.save()
+    else:
+        if not request.user.is_authenticated():
+            message={
+                'type':'warning',
+                'message':'User not Logged In'
+            }
+            return render(request,"login.html",message)
+        else:
+            return render(request,"register_admin.html")
