@@ -16,10 +16,10 @@
         {% if user.is_authenticated and user.is_staff and perms.Somtuevents.change_event %}
           <!-- Display update and delete buttons if the user is authenticated and is an admin -->
           <div class="btn-group" role="group" aria-label="Event Actions">
-            <a href="{% url 'update_event' event.id %}" class="btn btn-primary mr-2" >Update</a>
+            <a href="{% url 'update_event' event.id %}" class="btn btn-primary mr-2" >{% bs_icon 'pencil-fill' %} Update</a>
             <form action="{% url 'delete_event' event.id %}" method="post">
               {% csrf_token %}
-              <button type="submit" class="btn btn-danger mr-2">Delete</button>
+              <button type="submit" class="btn btn-danger mr-2">{% bs_icon 'trash-fill' %}Delete</button>
             </form>
           </div>
         {% endif %}
