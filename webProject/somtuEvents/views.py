@@ -162,16 +162,20 @@ def create_user(request):
         password=request.POST.get('password')
         email=request.POST.get('email')
         user=User.objects.create_user(username=username,password=password,email=email)
-        user.is_active=False
-        user.is_staff=True
-        user.is_superuser=False
-        user.save()
-    else:
-        if not request.user.is_authenticated():
-            message={
-                'type':'warning',
-                'message':'User not Logged In'
-            }
-            return render(request,"login.html",message)
+        if request.POST.get('is_active')=='on':
+            user.is_active=True
         else:
-            return render(request,"register_admin.html")
+            user.is_active=False
+        if request.POST.get('is_staff')=='on':
+            user.is_staff=True
+        else:
+            user.is_staff=False
+        user.is_superuser=False
+
+        user.has_perms(['Somtuevents.create_event', 'Somtuevents.view_event', 'Somtuevents.create_batch_class'])
+
+        user.save()
+        return redirect('login')
+    else:
+        
+        return render(request,"register_admin.html")

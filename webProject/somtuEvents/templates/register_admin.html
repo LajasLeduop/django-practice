@@ -2,24 +2,36 @@
 
 {% block title %} Register as user {% endblock %}
 
-{% block boudy %}
+{% block body %}
 
 <h2>Create User</h2>
 <form method="post">
     {% csrf_token %}
-    <div>
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required>
+    <div class="form-group">
+        <label for="username" class="form-label">Username:</label>
+        <input type="text" id="username" name="username" class="form-control" required>
     </div>
-    <div>
-        <label for="password">Password:</label>
-        <input type="password" id="password" name="password" required>
+    <div class="form-group">
+        <label for="password" class="form-label">Password:</label>
+        <input type="password" id="password" name="password" class="form-control" required>
     </div>
-    <div>
-        <label for="email">Email:</label>
-        <input type="email" id="email" name="email" required>
+    <div class="form-group">
+        <label for="email" class="form-label">Email:</label>
+        <input type="email" id="email" name="email" class="form-control" required>
     </div>
-    <button type="submit">Create User</button>
+    <div class="mb-3 form-check">
+        <input type="checkbox" id="is_staff" name="is_staff" class="form-check-input">
+        <label for="is_staff" class="form-label">Set User as Staff </label>
+    </div>
+    <div class="mb-3 form-check">
+        <input type="checkbox" id="is_active" name="is_active" class="form-check-input">
+        <label for="is_active" class="form-label">Set User as Active</label>
+    </div>
+
+   
+
+
+    <button type="submit" class="btn btn-primary">Create User</button>
 </form>
 
 {% endblock %}
