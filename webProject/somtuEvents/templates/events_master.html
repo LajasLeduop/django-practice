@@ -1,14 +1,23 @@
 {% extends "layout.html" %}
-
+{% load bootstrap_icons %}
 {% block title %} Events {% endblock %}
 
 {% block body %}
 
   <!-- Main Content Area -->
   <div class="container mt-5">
-    <h2>Upcoming Events</h2>
-    <div class="row">
-      {% for event in events %}
+    
+    {% if user.is_authenticated and user.is_staff and perms.Somtuevents.create_event %}
+    <div class="text-right">
+        <a href="{% url 'create-event' %}" class="btn btn-primary">{% bs_icon 'pencil-square' %}Create Event</a>
+    </div>
+    {% endif %}
+    
+
+    {% if currently_happening_events %}
+    <h2>Currently Happening</h2>
+    <div class="row mb-5">
+      {% for event in currently_happening_events %}
         <div class="col-md-4">
             <div class="card">
                 <img class="card-img-top" src="{{ event.banner.url }}" alt="Event 4">
@@ -21,6 +30,49 @@
         </div>
       {% endfor %}
     </div>
+    {% endif %}
+
+    {% if upcoming_events %}
+    <h2>Upcoming Events</h2>
+    <div class="row mb-5">
+      {% for event in upcoming_events %}
+        <div class="col-md-4">
+            <div class="card">
+                <img class="card-img-top" src="{{ event.banner.url }}" alt="Event 4">
+                <div class="card-body">
+                    <h5 class="card-title">{{ event.name }}</h5>
+                    <p class="card-text">{{ event.event_details }}</p>
+                    <a href="{% url 'event_detail' event.id %}" class="btn btn-primary">More Info</a>
+                </div>
+            </div>
+        </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if past_events %}
+    <H2>Past Events</H2>
+    <div class="row mb-5">
+      {% for event in past_events %}
+        <div class="col-md-4">
+            <div class="card">
+                <img class="card-img-top" src="{{ event.banner.url }}" alt="Event 4">
+                <div class="card-body">
+                    <h5 class="card-title">{{ event.name }}</h5>
+                    <p class="card-text">{{ event.event_details }}</p>
+                    <a href="{% url 'event_detail' event.id %}" class="btn btn-primary">More Info</a>
+                </div>
+            </div>
+        </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+
+  {% if not past_events and not upcoming_events and not currently_happening_events %}
+  
+<p>No Events to show</p>
+{% endif %}
 </div>
 
 {% endblock %}

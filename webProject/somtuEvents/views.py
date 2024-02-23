@@ -1,14 +1,16 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from django.views import View
+from django.db.models import Count
 from datetime import datetime
 from django.http import HttpResponse
 from django.contrib.auth.views import LoginView,LogoutView
 from django.urls import reverse_lazy
-from . forms import LoginForm,AttendeeForm,eventform
+from . forms import LoginForm,AttendeeForm,eventform,BatchClassForm
 from django.contrib.auth.decorators import login_required,permission_required
 from .models import EventDetails,EventAttendee,BatchClass
 from django.contrib.auth import logout
 from django.contrib.auth.models import User
+from django.utils import timezone
 
 
 
@@ -34,19 +36,39 @@ class index(View):
 
 
     def get(self,request):
-
-        event_details = EventDetails.objects.all()
+        current_datetime=timezone.now()
+        currently_happening_events = EventDetails.objects.filter(event_start_date__lte=current_datetime, event_end_date__gte=current_datetime)
+        upcoming_events = EventDetails.objects.filter(event_start_date__gt=current_datetime)
         data={
-            'events':event_details,
+            'events_now':currently_happening_events,
+            'events_future':upcoming_events
         }
         return render(request, 'index.html',data)
 
+# better updated view written below instead of this
+# def events(request):
+#     event_details = EventDetails.objects.all()
+#     data={
+#             'events':event_details,
+#         }
+#     return render(request,"events_master.html",data)
+
+
 def events(request):
-    event_details = EventDetails.objects.all()
-    data={
-            'events':event_details,
-        }
-    return render(request,"events_master.html",data)
+    current_datetime = timezone.now()
+    past_events = EventDetails.objects.filter(event_end_date__lt=current_datetime)
+    currently_happening_events = EventDetails.objects.filter(event_start_date__lte=current_datetime, event_end_date__gte=current_datetime)
+    upcoming_events = EventDetails.objects.filter(event_start_date__gt=current_datetime)
+    data = {
+        'past_events': past_events,
+        'currently_happening_events': currently_happening_events,
+        'upcoming_events': upcoming_events,
+    }
+    return render(request, "events_master.html", data)
+
+
+
+
 
 
 @login_required
@@ -84,7 +106,26 @@ def create_event(request):
         return render(request, 'createevent.html')
     
 def admindash(request):
-    return render(request,"admin-page.html")
+    total_currently_happening_events = EventDetails.objects.filter(event_start_date__lte=timezone.now(), event_end_date__gte=timezone.now()).count()
+    total_events = EventDetails.objects.count()
+    total_upcoming_events = EventDetails.objects.filter(event_start_date__gt=timezone.now()).count()
+    total_past_events = EventDetails.objects.filter(event_end_date__lt=timezone.now()).count()
+    total_registered_attendees = EventAttendee.objects.count()
+    upcoming_events=EventDetails.objects.filter(event_start_date__gt=timezone.now())[:5]
+    events_with_attendee_count=upcoming_events.annotate(num_attendees=Count('eventattendee'))
+    current_events=EventDetails.objects.filter(event_start_date__lte=timezone.now(), event_end_date__gte=timezone.now())[:5]
+    current_with_attendee_count=current_events.annotate(num_attendees=Count('eventattendee'))
+
+    context = {
+        'total_currently_happening_events': total_currently_happening_events,
+        'total_events': total_events,
+        'total_upcoming_events': total_upcoming_events,
+        'total_past_events': total_past_events,
+        'total_registered_attendees': total_registered_attendees,
+        'events_with_count':events_with_attendee_count,
+        'current_with_count':current_with_attendee_count
+    }
+    return render(request,"admin-page.html",context)
 
 
 def event_details(request,eventid):
@@ -98,7 +139,6 @@ class register(View):
     def post(self,request):
         form = AttendeeForm(request.POST)
         if form.is_valid():
-            # Create an instance of the EventAttendee model but don't save it yet
             event_attendee = form.save(commit=False)
             if 'is_somtu_student' in request.POST:
                 event_attendee.is_somtu_student = True
@@ -127,7 +167,8 @@ def view_registrations(request):
 
     }
     return render(request,"view_registration.html",data)
-
+@login_required
+@permission_required('Somtuevents.update_event',login_url='login')
 def update_event(request,eventid):
     event = EventDetails.objects.get(pk=eventid)
     if request.method == 'POST':
@@ -179,3 +220,14 @@ def create_user(request):
     else:
         
         return render(request,"register_admin.html")
+    
+
+def create_class(request):
+    if request.method=="POST":
+        form = BatchClassForm(request.POST)
+        if form.is_valid:
+            form.save()
+        return redirect('index')
+    else:
+        form=BatchClassForm()
+        return render(request,"classform.html",{'form':form})

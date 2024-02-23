@@ -1,18 +1,115 @@
 {% extends "layout.html" %}
-
+{% load bootstrap_icons %}
 {% block title %} Admin Dashboard {% endblock %}
 
 {% block body %}
 
 <div class="col-lg row mt-5">
-    <a href="{% url 'create-event' %}" class="btn btn-primary mr-5 mt-2">Create An Event</a>
+    <a href="{% url 'create-event' %}" class="btn btn-primary mr-5 mt-2">{% bs_icon "pencil-fill" %}Create An Event</a>
 
-    <a href="{% url 'view_registrations' %}" class="btn btn-primary mr-5 mt-2">View Registrations</a>
+   
 
-    <a href="{% url 'create_user' %}" class="btn btn-primary mr-5 mt-2">Create User</a>
+    <a href="{% url 'create_user' %}" class="btn btn-primary mr-5 mt-2">{% bs_icon "pencil-fill" %}Create User</a>
+
+    <a href="{% url 'create_class' %}" class="btn btn-primary mr-5 mt-2">{% bs_icon "pencil-fill" %}Create Class </a>
+
+    <a href="{% url 'view_registrations' %}" class="btn btn-primary mr-5 mt-2">{% bs_icon "eye-fill" %}View Registrations</a>
 
 
 </div>
+<div class="col-lg mt-5">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Event Statistics</th>
+                <th>Count</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Total Events</td>
+                <td>{{ total_events }}</td>
+            </tr>
+            <tr>
+                <td>Total Currently Happening Events</td>
+                <td>{{ total_currently_happening_events }}</td>
+            </tr>
+            
+            <tr>
+                <td>Total Upcoming Events</td>
+                <td>{{ total_upcoming_events }}</td>
+            </tr>
+            <tr>
+                <td>Total Past Events</td>
+                <td>{{ total_past_events }}</td>
+            </tr>
+            <tr>
+                <td>Total Registered Attendees</td>
+                <td>{{ total_registered_attendees }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 
+{% if current_with_count %}
+<div class="col-lg mt-5">
+    <h4>Current Events with Registration Count</h4>
+    <table class="table">
+        <thead>
+                <tr>
+                    <th>Event Name</th>
+                    <th>Venue</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Registered Attendees</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for event in current_with_count %}
+                <tr>
+                    <td>{{ event.name }}</td>
+                    <td>{{ event.venue }}</td>
+                    <td>{{ event.event_start_date }}</td>
+                    <td>{{ event.event_end_date }}</td>
+                    <td>{{ event.num_attendees }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+
+      
+    </table>
+</div>
+{% endif %}
+
+
+{% if events_with_count %}
+<div class="col-lg mt-5">
+    <h4>Upcoming Events with Registration Count</h4>
+    <table class="table">
+        <thead>
+                <tr>
+                    <th>Event Name</th>
+                    <th>Venue</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Registered Attendees</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for event in events_with_count %}
+                <tr>
+                    <td>{{ event.name }}</td>
+                    <td>{{ event.venue }}</td>
+                    <td>{{ event.event_start_date }}</td>
+                    <td>{{ event.event_end_date }}</td>
+                    <td>{{ event.num_attendees }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+
+      
+    </table>
+</div>
+{% endif %}
 
 {% endblock %}

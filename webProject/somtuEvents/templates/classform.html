@@ -1,0 +1,32 @@
+
+{% extends "layout.html" %}
+{% load widget_tweaks %}
+{% load bootstrap_icons %}
+{% block title %} Create Event {% endblock %}
+
+
+
+
+{% block body %}
+
+<div class="container">
+    <h2>Add Class</h2>
+    <form method="post" class="mt-5">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="{{ form.attendee_name.id_for_label }}">Class Name</label>
+            {{ form.class_name|add_class:"form-control" }}
+        </div>
+        <div class="form-group">
+            <label for="{{ form.class_stream.id_for_label }}">Class Stream</label>
+            {{ form.class_stream|add_class:"form-control" }}
+        </div>
+        <div class="form-group">
+            <label for="{{ form.class_batch.id_for_label }}">Batch No.</label>
+            {{ form.class_batch|add_class:"form-control" }}
+        </div>
+        <button type="submit" class="btn btn-primary">{% bs_icon "pencil-fill" %} Create Class</button>
+        </form>
+    </div>
+
+    {% endblock %}

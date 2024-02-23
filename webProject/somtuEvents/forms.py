@@ -33,3 +33,7 @@ class AttendeeForm(forms.ModelForm):
         model = EventAttendee
         fields = ['attendee_name', 'attendee_email','attendee_phone','attendee_class','is_somtu_student','event']
 
+class BatchClassForm(forms.ModelForm):
+    class Meta:
+        model=BatchClass
+        fields=['class_name','class_stream','class_batch']

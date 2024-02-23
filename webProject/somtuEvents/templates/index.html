@@ -5,27 +5,30 @@
 
 {% block body%}
 
-<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+<div id="carouselExampleIndicators" class="carousel slide mt-2" data-ride="carousel">
     <ol class="carousel-indicators">
-        {% for event in events %}
+        {% for event in events_now %}
         <li data-target="#carouselExampleIndicators" data-slide-to="{{ forloop.counter0 }}" {% if forloop.first %}class="active"{% endif %}></li>
         {% endfor %}
-        <!-- Add more indicators as needed -->
+
     </ol>
     <div class="carousel-inner">
-        {% for event in events %}
+        {% for event in events_now %}
+        
+        <a href="{% url 'event_detail' event.id %}">
         <div class="carousel-item {% if forloop.first %}active{% endif %}">
             <img class="d-block w-100" src="{{ event.banner.url }}" alt="Event Banner">
             <div class="carousel-caption d-none d-md-block">
                 <div class="carousel-caption-overlay">
-                    <h5>{{ event.name }}</h5>
+                    <h6>Happening Now</h6>
+                    <h3>{{ event.name }}</h3>
                     <p>{{ event.event_details }}</p>
                     <p>{{ event.event_start_date }} - {{ event.event_end_date }}</p>
                 </div>
             </div>
         </div>
+    </a>
         {% endfor %}
-        <!-- Add more carousel items with events -->
     </div>
     
     <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
@@ -40,11 +43,11 @@
 
 
   
-  <!-- Main Content Area -->
-  <div class="container mt-5">
+
+  <div class="container mt-5 mb-10 pb-5">
       <h2>Upcoming Events</h2>
       <div class="row">
-        {% for event in events %}
+        {% for event in events_future %}
           <div class="col-md-4">
               <div class="card">
                   <img class="card-img-top" src="{{ event.banner.url }}" alt="Event 4">

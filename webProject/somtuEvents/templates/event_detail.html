@@ -4,25 +4,28 @@
 
 {% block body %}
 <div class="container mt-5">
-    <h2>Event Details</h2>
+    <h2>Event Details of {{ event.name }}</h2>
     <div class="card">
       <div class="card-body">
         <img class="card-img-top" src="{{ event.banner.url }}" alt="Event 4">
-        <h5 class="card-title">{{ event.name }}</h5>
+        <h4 class="card-title mt-2">{{ event.name }}</h4>
         <p class="card-text">Venue: {{ event.venue }}</p>
-        <p class="card-text">{% bs_icon "geo-alt" %}Location: {{ event.venue_location }}</p>
+        <p class="card-text">Location: {{ event.venue_location }}</p>
         <p class="card-text">Details: {{ event.event_details }}</p>
-        <!-- Add any other event details you want to display -->
+
+
+
+        <div class="btn-group" role="group" aria-label="Event Actions">
+        <a href="{% url 'register_attendee' %}" class="btn btn-primary mr-2" >{% bs_icon 'file-check-fill' %} Register</a>
         {% if user.is_authenticated and user.is_staff and perms.Somtuevents.change_event %}
-          <!-- Display update and delete buttons if the user is authenticated and is an admin -->
-          <div class="btn-group" role="group" aria-label="Event Actions">
             <a href="{% url 'update_event' event.id %}" class="btn btn-primary mr-2" >{% bs_icon 'pencil-fill' %} Update</a>
             <form action="{% url 'delete_event' event.id %}" method="post">
               {% csrf_token %}
               <button type="submit" class="btn btn-danger mr-2">{% bs_icon 'trash-fill' %}Delete</button>
             </form>
-          </div>
+          
         {% endif %}
+      </div>
       </div>
     </div>
   </div>

@@ -8,15 +8,25 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
       .carousel-caption-overlay {
-    background-color: rgba(0, 0, 0, 0.623); /* Translucent dark background */
-    padding: 20px; /* Adjust padding as needed */
-    color: white; /* Text color */
+    background-color: rgba(0, 0, 0, 0.623);
+    padding: 20px;
+    color: white;
 }
+.sticky {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
+.sticky + .container {
+  padding-bottom: 60px;
+}
+
 
     </style>
 </head>
 <body>
-    <!-- Header -->
+   
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <a class="navbar-brand" href="#">Event Management System</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -41,58 +51,77 @@
         <li class="nav-item">
           <a class="nav-link" href="{% url 'events' %}">Events</a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item mr-5">
           <a class="nav-link" href="#">About</a>
         </li>
+        
         {% if user.is_authenticated %}
                     <li class="nav-item">
                        
-                      <a href="{% url 'logout' %}" class="nav-link">Logout</a>
+                      <a href="{% url 'logout' %}" class="nav-link">Logout{% bs_icon 'box-arrow-in-right' %}</a>
                
                     </li>
                     <li class="nav-item">
                         <a href="{% url 'admindash' %}" class="nav-link">Admin Panel</a>
                     </li>
+                    <li class="nav-item">
+                     <a href="#" class="nav-link disabled">{% bs_icon "person-circle" %}{{ user.username }}</a>
+                  </li>
             {% else %}
             <li class="nav-item">
-              <a href="{% url 'register_attendee' %}" class="nav-link">Register</a>
+              <a href="{% url 'register_attendee' %}" class="nav-link">{% bs_icon 'door-open' %}Register</a>
           </li>
             <li class="nav-item">
-                <a href="{% url 'login' %}" class="nav-link">Login</a>
+                <a href="{% url 'login' %}" class="nav-link">{% bs_icon 'lock-fill' %}Login</a>
             </li>
             {% endif %}
         
       </ul>
     </div>
   </nav>
-  <div class="container">
+  <div class="container mb-5">
     {% block body %}
 
     {% endblock %}
 </div>
 
-    <footer class="bg-dark text-white mt-5">
-        <div class="container py-4">
-            <div class="row">
-                <div class="col-md-6">
-                    <h5>Event Management System</h5>
-                    <p>Powered By: MBA-IT 7TH Batch</p>
-                </div>
-                <div class="col-md-6">
-                    <h5>Contact Us</h5>
-                    <p>{% bs_icon 'envelope' %} Email: <a href="mailto:som.tu.edu.np">som.tu.edu.np</a></p>
-                    <p>{% bs_icon 'phone' %}Phone: <a href="tel:+01234556">123-456-7890</a></p>
-                </div>
-            </div>
-        </div>
-        <div class="text-center py-3">
-            <p>&copy; 2024 Event Management System</p>
-        </div>
-    </footer>
 
+<footer id="footer" class="bg-dark text-white mb-10">
+  <div class="container py-4">
+      <div class="row">
+          <div class="col-md-6">
+              <h5>Event Management System</h5>
+              <p>Powered By: MBA-IT 7TH Batch</p>
+          </div>
+          <div class="col-md-6">
+              <h5>Contact Us</h5>
+              <p>{% bs_icon 'envelope' %} Email: <a href="mailto:som.tu.edu.np">som.tu.edu.np</a></p>
+              <p>{% bs_icon 'phone' %} Phone: <a href="tel:+01234556">123-456-7890</a></p>
+          </div>
+      </div>
+  </div>
+  <div class="text-center py-3">
+      <p>&copy; 2024 Event Management System</p>
+  </div>
+</footer>
 
+<script>
+  window.onscroll = function() {
+  myFunction();
+};
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+var footer = document.getElementById("footer");
+var sticky = footer.offsetTop;
+
+function myFunction() {
+  if (window.pageYOffset + window.innerHeight >= document.body.scrollHeight+2) {
+    footer.classList.add("sticky");
+  } else {
+    footer.classList.remove("sticky");
+  }
+}
+</script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@1.16.1/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
