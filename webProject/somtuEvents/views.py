@@ -2,7 +2,7 @@ from django.shortcuts import render,redirect,get_object_or_404
 from django.views import View
 from django.db.models import Count
 from datetime import datetime
-from django.http import HttpResponse
+from django.http import HttpResponse,HttpResponseForbidden
 from django.contrib.auth.views import LoginView,LogoutView
 from django.urls import reverse_lazy
 from . forms import LoginForm,AttendeeForm,eventform,BatchClassForm
@@ -213,7 +213,7 @@ def create_user(request):
             user.is_staff=False
         user.is_superuser=False
 
-        user.has_perms(['Somtuevents.create_event', 'Somtuevents.view_event', 'Somtuevents.create_batch_class'])
+        user.has_perm('Somtuevents.create_event')
 
         user.save()
         return redirect('login')
@@ -221,13 +221,45 @@ def create_user(request):
         
         return render(request,"register_admin.html")
     
-
+@login_required
 def create_class(request):
     if request.method=="POST":
         form = BatchClassForm(request.POST)
         if form.is_valid:
             form.save()
-        return redirect('index')
+        return redirect('admin-dash')
     else:
         form=BatchClassForm()
         return render(request,"classform.html",{'form':form})
+
+@login_required
+def view_users(request):
+    if request.method=="POST":
+        pass
+    else:
+        users=User.objects.all()
+        return render(request,"view_users.html",{'users':users})
+    
+@login_required
+def delete_user(request,userid):
+    if request.method=="POST":
+        if request.user.is_authenticated and request.user.is_superuser:
+            user=User.objects.get(pk=userid)
+            user.delete()
+            data={
+                'type':"success",
+                'message':"User "+user.username+" has been deleted successfully"
+            }
+            return render (request,"message.html",data)
+        else:
+            data={
+        'message':"User "+ request.user.username+ ", you do not have enough permissions to perform this action",
+        'type':"error"
+        }
+        return render(request,"message.html",data)
+    else:
+        data={
+        'message':"GET Method Not Allowed in this Route",
+        'type':"error"
+        }
+        return render(request,"message.html",data)

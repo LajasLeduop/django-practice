@@ -15,5 +15,7 @@ urlpatterns=[
     path("delete/event/<str:eventid>/",views.delete_event,name="delete_event"),
     path("update/event/<str:eventid>/",views.update_event,name="update_event"),
     path("create/user",views.create_user,name="create_user"),
-    path("create/class",views.create_class,name="create_class")
+    path("create/class",views.create_class,name="create_class"),
+    path("view/users",views.view_users,name="view_users"),
+    path("delete/user/<str:userid>",views.delete_user,name="delete_user")
 ]
